@@ -5,11 +5,12 @@ import * as path from 'node:path';
 import { ConfigProvider } from './app.config.provider';
 import { DatabaseModule } from './database/database.module';
 import { FilmsProvider } from './films/films.provider';
-import { FilmsRepository } from './repository/films.repository';
+import { FilmsRepositoryMongo } from './repository/filmsMongo.repository';
 import { FilmsController } from './films/films.controller';
 import { OrderController } from './order/order.controller';
 import { FilmsService } from './films/films.service';
 import { OrderService } from './order/order.service';
+import { FilmsRepositoryPostgres } from './repository/filmsPostgres.repository';
 
 @Module({
   imports: [
@@ -27,7 +28,8 @@ import { OrderService } from './order/order.service';
   providers: [
     ConfigProvider,
     FilmsProvider,
-    FilmsRepository,
+    FilmsRepositoryMongo,
+    FilmsRepositoryPostgres,
     FilmsService,
     OrderService,
   ],
