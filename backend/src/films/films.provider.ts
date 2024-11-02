@@ -7,9 +7,9 @@ export const FilmsProvider = {
   inject: ['DB_CONNECT', 'CONFIG'],
   useFactory: (connection, config: AppConfig) => {
     if (config.database.driver === 'postgres') {
-      connection.getRepository(Film);
+      return connection.getRepository(Film);
     } else if (config.database.driver === 'mongodb') {
-      connection.model('Film', FilmSchema);
+      return connection.model('Film', FilmSchema);
     }
   },
 };

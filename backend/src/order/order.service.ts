@@ -25,7 +25,6 @@ export class OrderService {
         if (sessionData.includes(order.seatsSelection)) {
           throw new seatsOccupiedException(order.seatsSelection);
         }
-  
         ticketsAvailableForPurchase.push({
           filmId: order.filmId,
           sessionId: order.sessionId,
@@ -42,9 +41,32 @@ export class OrderService {
           );
         });
       }
+    } else if (this.config.database.driver === 'postgres') {
+      for (const order of orderData.getOrderData) {
+        const sessionData = await this.filmDatabasePostgres.getSessionData(
+          order.filmId,
+          order.sessionId,
+        );
+        if (sessionData.includes(order.seatsSelection)) {
+          throw new seatsOccupiedException(order.seatsSelection);
+        }
+        ticketsAvailableForPurchase.push({
+          filmId: order.filmId,
+          sessionId: order.sessionId,
+          seatsSelection: order.seatsSelection,
+        });
+      }
+      if (ticketsAvailableForPurchase.length > 0) {
+        ticketsAvailableForPurchase.forEach((ticket) => {
+          const { filmId, sessionId, seatsSelection } = ticket;
+          this.filmDatabasePostgres.placeSeatsOrder(
+            filmId,
+            sessionId,
+            seatsSelection,
+          );
+        });
+      }
     }
-    
-
     return orderData;
   }
 }

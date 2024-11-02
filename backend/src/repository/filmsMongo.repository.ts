@@ -37,8 +37,7 @@ export class FilmsRepositoryMongo {
 
   async findFilmById(filmId: string): Promise<GetFilmDto> {
     try {
-      const film = await this.filmsRepository.findOne({ id: filmId });
-      return film;
+      return await this.filmsRepository.findOne({ id: filmId });
     } catch (error) {
       throw new FilmNotFoundException(filmId);
     }
@@ -72,7 +71,7 @@ export class FilmsRepositoryMongo {
       );
       return;
     } catch (error) {
-      new ServerErrorException(error.message);
+      new ServerErrorException('Неизвестная ошибка сервера');
     }
   }
 }
