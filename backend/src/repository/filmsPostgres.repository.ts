@@ -57,10 +57,9 @@ export class FilmsRepositoryPostgres {
     const previousData = myFilm.schedule[sessionIndex].taken;
     const newData = previousData.concat(seats);
     myFilm.schedule[sessionIndex].taken = newData;
-    console.log(myFilm.schedule[sessionIndex].taken);
 
     try {
-      //await myFilm.save();
+      await this.filmsRepository.save(myFilm);
       return;
     } catch (error) {
       new ServerErrorException('Неизвестная ошибка сервера');
