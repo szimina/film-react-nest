@@ -47,19 +47,19 @@ export class FilmsRepositoryPostgres {
   }
 
   async placeSeatsOrder(filmId: string, sessionId: string, seats: string) {
-    const myFilm = await this.filmsRepository.findOne({
+    const film = await this.filmsRepository.findOne({
       where: { id: filmId },
       relations: { schedule: true },
     });
-    const sessionIndex = myFilm.schedule.findIndex((session) => {
+    const sessionIndex = film.schedule.findIndex((session) => {
       return session.id === sessionId;
     });
-    const previousData = myFilm.schedule[sessionIndex].taken;
+    const previousData = film.schedule[sessionIndex].taken;
     const newData = previousData.concat(seats);
-    myFilm.schedule[sessionIndex].taken = newData;
+    film.schedule[sessionIndex].taken = newData;
 
     try {
-      await this.filmsRepository.save(myFilm);
+      await this.filmsRepository.save(film);
       return;
     } catch (error) {
       new ServerErrorException('Неизвестная ошибка сервера');

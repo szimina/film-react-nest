@@ -39,6 +39,6 @@ export class Film {
   @IsString()
   description: string;
 
-  @OneToMany(() => Schedule, (schedule) => schedule.film)
+  @OneToMany(() => Schedule, (schedule) => schedule.film, { cascade: true })
   schedule: Schedule[];
 }
