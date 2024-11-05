@@ -2,11 +2,12 @@ import { Inject } from '@nestjs/common';
 import { Model } from 'mongoose';
 import { GetFilmDto } from '../films/dto/films.dto';
 import { Film } from '../films/schemas/film.schema';
-import { SessionNotFoundException } from 'src/exceptions/sessionNotFoundException';
-import { FilmNotFoundException } from 'src/exceptions/filmNotFoundException';
+import { SessionNotFoundException } from '../exceptions/sessionNotFoundException';
+import { FilmNotFoundException } from '../exceptions/filmNotFoundException';
+import { ServerErrorException } from '../exceptions/serverErrorException';
 
-export class FilmsRepository {
-  constructor(@Inject('FILM_DB') private filmModel: Model<Film>) {}
+export class FilmsRepositoryMongo {
+  constructor(@Inject('FILM_DB') private filmsRepository: Model<Film>) {}
 
   private getFilmMapperFn(): (filmFromDB: Film) => GetFilmDto {
     return (root) => {
@@ -26,8 +27,8 @@ export class FilmsRepository {
   }
 
   async findAllFilms(): Promise<{ total: number; items: GetFilmDto[] }> {
-    const films = await this.filmModel.find({});
-    const total = await this.filmModel.countDocuments({});
+    const films = await this.filmsRepository.find({});
+    const total = await this.filmsRepository.countDocuments({});
     return {
       total,
       items: films.map(this.getFilmMapperFn()),
@@ -36,8 +37,7 @@ export class FilmsRepository {
 
   async findFilmById(filmId: string): Promise<GetFilmDto> {
     try {
-      const film = await this.filmModel.findOne({ id: filmId });
-      return film;
+      return await this.filmsRepository.findOne({ id: filmId });
     } catch (error) {
       throw new FilmNotFoundException(filmId);
     }
@@ -45,7 +45,7 @@ export class FilmsRepository {
 
   async getSessionData(filmId: string, sessionId: string): Promise<string[]> {
     try {
-      const film = await this.filmModel.findOne({ id: filmId });
+      const film = await this.filmsRepository.findOne({ id: filmId });
       const sessionIndex = film.schedule.findIndex((session) => {
         return session.id === sessionId;
       });
@@ -60,18 +60,18 @@ export class FilmsRepository {
     sessionId: string,
     seats: string,
   ): Promise<string[]> {
-    const film = await this.filmModel.findOne({ id: filmId });
+    const film = await this.filmsRepository.findOne({ id: filmId });
     const sessionIndex = film.schedule.findIndex((session) => {
       return session.id === sessionId;
     });
     try {
-      await this.filmModel.updateOne(
+      await this.filmsRepository.updateOne(
         { id: filmId },
         { $push: { [`schedule.${sessionIndex.toString()}.taken`]: seats } },
       );
       return;
     } catch (error) {
-      new Error('неизвестная ошибка заказа');
+      new ServerErrorException('Неизвестная ошибка сервера');
     }
   }
 }
