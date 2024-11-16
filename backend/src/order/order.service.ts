@@ -1,9 +1,9 @@
 import { Injectable, Inject } from '@nestjs/common';
 import { CreateOrderDto } from './dto/order.dto';
 import { seatsOccupiedException } from '../exceptions/seatsOccupiedException';
-import { AppConfig } from 'src/app.config.provider';
-import { FilmsRepositoryMongo } from 'src/repository/filmsMongo.repository';
-import { FilmsRepositoryPostgres } from 'src/repository/filmsPostgres.repository';
+import { AppConfig } from '../app.config.provider';
+import { FilmsRepositoryMongo } from '../repository/filmsMongo.repository';
+import { FilmsRepositoryPostgres } from '../repository/filmsPostgres.repository';
 
 @Injectable()
 export class OrderService {
@@ -13,22 +13,24 @@ export class OrderService {
     private readonly filmDatabasePostgres: FilmsRepositoryPostgres,
   ) {}
 
-  async placeOrder(orderData: CreateOrderDto): Promise<any> {
+  async placeOrder(orderData: CreateOrderDto): Promise<CreateOrderDto> {
     const ticketsAvailableForPurchase = [];
 
     if (this.config.database.driver === 'mongodb') {
-      for (const order of orderData.getOrderData) {
+      for (const ticket of orderData.tickets) {
         const sessionData = await this.filmDatabaseMongo.getSessionData(
-          order.filmId,
-          order.sessionId,
+          ticket.film,
+          ticket.session,
         );
-        if (sessionData.includes(order.seatsSelection)) {
-          throw new seatsOccupiedException(order.seatsSelection);
+
+        const seatsSelection = `${ticket.row}:${ticket.seat}`;
+        if (sessionData.includes(seatsSelection)) {
+          throw new seatsOccupiedException(seatsSelection);
         }
         ticketsAvailableForPurchase.push({
-          filmId: order.filmId,
-          sessionId: order.sessionId,
-          seatsSelection: order.seatsSelection,
+          filmId: ticket.film,
+          sessionId: ticket.session,
+          seatsSelection: seatsSelection,
         });
       }
       if (ticketsAvailableForPurchase.length > 0) {
@@ -41,19 +43,23 @@ export class OrderService {
           );
         });
       }
+      return;
     } else if (this.config.database.driver === 'postgres') {
-      for (const order of orderData.getOrderData) {
+      for (const ticket of orderData.tickets) {
         const sessionData = await this.filmDatabasePostgres.getSessionData(
-          order.filmId,
-          order.sessionId,
+          ticket.film,
+          ticket.session,
         );
-        if (sessionData.includes(order.seatsSelection)) {
-          throw new seatsOccupiedException(order.seatsSelection);
+
+        const seatsSelection = `${ticket.row}:${ticket.seat}`;
+        if (sessionData.includes(seatsSelection)) {
+          throw new seatsOccupiedException(seatsSelection);
         }
+
         ticketsAvailableForPurchase.push({
-          filmId: order.filmId,
-          sessionId: order.sessionId,
-          seatsSelection: order.seatsSelection,
+          filmId: ticket.film,
+          sessionId: ticket.session,
+          seatsSelection: seatsSelection,
         });
       }
       if (ticketsAvailableForPurchase.length > 0) {
