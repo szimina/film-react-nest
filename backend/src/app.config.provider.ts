@@ -13,6 +13,8 @@ export const ConfigProvider = {
       password: process.env.DATABASE_PASSWORD,
       databasename: process.env.DATABASE_DATABASE,
     },
+    mode: process.env.MODE,
+    logger: process.env.LOGGER_APP,
   },
 };
 

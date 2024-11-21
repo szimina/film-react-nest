@@ -6,7 +6,7 @@
 	@include mixins.flex(row);
 	height: $headerHeight;
 	min-width: $minPageWidth;
-	align-items: center;
+	align-tickets: center;
 	justify-content: space-between;
 
 	.logo,
@@ -30,7 +30,7 @@
 			position: absolute;
 			display: flex;
 			justify-content: center;
-			align-items: center;
+			align-tickets: center;
 			top: 0;
 			right: -0.2rem;
 			width: 0.8rem;

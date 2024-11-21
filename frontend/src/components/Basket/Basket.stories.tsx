@@ -18,7 +18,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    items: [
+    tickets: [
       {
         id: '1',
         place: 'A1',

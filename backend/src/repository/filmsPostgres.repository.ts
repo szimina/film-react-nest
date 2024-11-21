@@ -4,6 +4,7 @@ import { Film } from '../films/entities/film.entity';
 import { FilmNotFoundException } from '../exceptions/filmNotFoundException';
 import { SessionNotFoundException } from '../exceptions/sessionNotFoundException';
 import { ServerErrorException } from '../exceptions/serverErrorException';
+import { Schedule } from '../films/entities/schedule.entity';
 
 export class FilmsRepositoryPostgres {
   constructor(
@@ -11,21 +12,27 @@ export class FilmsRepositoryPostgres {
     private filmsRepository: Repository<Film>,
   ) {}
 
-  async findAllFilms(): Promise<{ total: number; items: Film[] }> {
-    const [total, items] = await Promise.all([
+  async findAllFilms(): Promise<{ total: number; tickets: Film[] }> {
+    const [total, tickets] = await Promise.all([
       this.filmsRepository.count(),
       this.filmsRepository.find({ relations: { schedule: true } }),
     ]);
 
-    return { total, items };
+    return { total, tickets };
   }
 
-  async findFilmById(filmId: string): Promise<Film> {
+  async findFilmById(
+    filmId: string,
+  ): Promise<{ total: number; tickets: Schedule[] }> {
     try {
-      return this.filmsRepository.findOne({
+      const film = await this.filmsRepository.findOne({
         where: { id: filmId },
         relations: { schedule: true },
       });
+      return {
+        total: film.schedule.length,
+        tickets: film.schedule,
+      };
     } catch (error) {
       throw new FilmNotFoundException(filmId);
     }

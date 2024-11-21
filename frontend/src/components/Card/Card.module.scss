@@ -6,7 +6,7 @@
   background-color: $primary;
   color: white;
   @include mixins.flex(row);
-  align-items: center;
+  align-tickets: center;
   padding: 0;
   overflow: hidden;
 

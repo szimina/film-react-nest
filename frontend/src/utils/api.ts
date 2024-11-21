@@ -48,6 +48,8 @@ export class Api {
         data: object,
         method = EnumApiMethods.POST
     ) {
+        console.log(this.baseUrl);
+        console.log(uri)
         const response = await fetch(this.baseUrl + uri, {
             ...this._options,
             method,
@@ -59,7 +61,7 @@ export class Api {
 
 export type ApiListResponse<Type> = {
     total: number;
-    items: Type[];
+    tickets: Type[];
 };
 
 export interface Movie {
@@ -136,7 +138,8 @@ export class FilmAPI extends Api implements IFilmAPI {
         const data = await this._get<ApiListResponse<Session>>(
             `/films/${id}/schedule`
         );
-        return data.items.map((schedule) => {
+        console.log(data);
+        return data.tickets.map((schedule) => {
             const daytime = dayjs(schedule.daytime);
             return {
                 ...schedule,
@@ -152,7 +155,7 @@ export class FilmAPI extends Api implements IFilmAPI {
      */
     async getFilms(): Promise<Movie[]> {
         const data = await this._get<ApiListResponse<Movie>>('/films');
-        return data.items.map((item) => ({
+        return data.tickets.map((item) => ({
             ...item,
             image: this.cdn + item.image,
             cover: this.cdn + item.cover,
@@ -171,7 +174,8 @@ export class FilmAPI extends Api implements IFilmAPI {
             '/order',
             order
         );
-        return data.items.map((ticket) => {
+        console.log(data)
+        return data.tickets.map((ticket) => {
             const daytime = dayjs(ticket.daytime);
             return {
                 ...ticket,

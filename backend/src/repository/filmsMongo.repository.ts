@@ -26,12 +26,12 @@ export class FilmsRepositoryMongo {
     };
   }
 
-  async findAllFilms(): Promise<{ total: number; items: GetFilmDto[] }> {
+  async findAllFilms(): Promise<{ total: number; tickets: GetFilmDto[] }> {
     const films = await this.filmsRepository.find({});
     const total = await this.filmsRepository.countDocuments({});
     return {
       total,
-      items: films.map(this.getFilmMapperFn()),
+      tickets: films.map(this.getFilmMapperFn()),
     };
   }
 
