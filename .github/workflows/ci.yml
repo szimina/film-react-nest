@@ -1,6 +1,13 @@
 name: CI
 
-on: [push]
+on:
+  push:
+    branches:
+      - review18
+  pull_request:
+    branches:
+      - review18
+      - main
 
 jobs:
     build:
@@ -15,7 +22,7 @@ jobs:
               with:
                 registry: ghcr.io
                 username: ${{ github.actor }}
-                password: ${{ secrets.Film }}
+                password: ${{ secrets.DOCKER_SECRET }}
 
             - name: Setup Buildx
               uses: docker/setup-buildx-action@v3
