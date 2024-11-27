@@ -1,23 +1,11 @@
-FROM node:20-alpine AS builder
+FROM node:20-alpine
 
-WORKDIR /var/www/app
+WORKDIR /app
 
-COPY package*.json ./
+COPY package.json package-lock.json ./
 
 RUN npm install
 
 COPY . .
 
-RUN npm run build
-
-FROM node:20-alpine AS production
-
-WORKDIR /var/www/app
-
-COPY --from=builder /var/www/app/package*.json ./
-
-RUN npm install
-
-COPY --from=builder /var/www/app/dist ./dist/
-
-CMD ["node", "./dist/main.js"] 
+RUN npm run build 

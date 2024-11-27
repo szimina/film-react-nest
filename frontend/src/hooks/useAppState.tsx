@@ -29,9 +29,9 @@ export function useAppState() {
         session: `${ticket.day} ${ticket.time}`
     }));
 
-    const setFilms = (tickets: Movie[]) => dispatch({ type: 'setFilms', payload: tickets });
+    const setFilms = (items: Movie[]) => dispatch({ type: 'setFilms', payload: items });
     const setSelectedFilm = (id: string) => dispatch({ type: 'selectFilm', payload: id });
-    const setCurrentSchedule = (tickets: Session[]) => dispatch({ type: 'setSchedule', payload: tickets });
+    const setCurrentSchedule = (items: Session[]) => dispatch({ type: 'setSchedule', payload: items });
     const selectSession = (id: string) => dispatch({ type: 'selectSession', payload: id });
     const selectPlace = (place: string) => dispatch({ type: 'addToBasket', payload: place });
     const removeTicket = (place: string) => dispatch({ type: 'removeFromBasket', payload: place });

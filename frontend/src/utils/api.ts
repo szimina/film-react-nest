@@ -61,7 +61,7 @@ export class Api {
 
 export type ApiListResponse<Type> = {
     total: number;
-    tickets: Type[];
+    items: Type[];
 };
 
 export interface Movie {
@@ -139,7 +139,7 @@ export class FilmAPI extends Api implements IFilmAPI {
             `/films/${id}/schedule`
         );
         console.log(data);
-        return data.tickets.map((schedule) => {
+        return data.items.map((schedule) => {
             const daytime = dayjs(schedule.daytime);
             return {
                 ...schedule,
@@ -155,7 +155,7 @@ export class FilmAPI extends Api implements IFilmAPI {
      */
     async getFilms(): Promise<Movie[]> {
         const data = await this._get<ApiListResponse<Movie>>('/films');
-        return data.tickets.map((item) => ({
+        return data.items.map((item) => ({
             ...item,
             image: this.cdn + item.image,
             cover: this.cdn + item.cover,
@@ -175,10 +175,10 @@ export class FilmAPI extends Api implements IFilmAPI {
             order
         );
         console.log(data)
-        return data.tickets.map((ticket) => {
-            const daytime = dayjs(ticket.daytime);
+        return data.items.map((item) => {
+            const daytime = dayjs(item.daytime);
             return {
-                ...ticket,
+                ...item,
                 day: daytime.format('D MMMM'),
                 time: daytime.format('HH:mm'),
             };

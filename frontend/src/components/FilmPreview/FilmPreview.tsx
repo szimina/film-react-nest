@@ -7,7 +7,7 @@ export type FilmPreviewProps = FilmInfoProps & {
     onClick?: () => void;
 };
 
-export function FilmPreview({onClick, cover, ...props}: FilmPreviewProps) {
+export function FilmPreview ({onClick, cover, ...props}: FilmPreviewProps) {
     return (
         <main className={styles.hero}>
             <img src={cover} alt={props.title} className={styles.background}/>

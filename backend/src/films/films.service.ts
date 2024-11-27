@@ -1,30 +1,40 @@
-import { Injectable, Inject } from '@nestjs/common';
-import { AppConfig } from 'src/app.config.provider';
-import { FilmsRepositoryMongo } from '../repository/filmsMongo.repository';
-import { FilmsRepositoryPostgres } from '../repository/filmsPostgres.repository';
-
+import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
+import { Film } from './entities/film.entity';
+import { Schedule } from './entities/schedule.entity';
+import { FilmNotFoundException } from '../exceptions/filmNotFoundException';
 
 @Injectable()
 export class FilmsService {
   constructor(
-    @Inject('CONFIG') private readonly config: AppConfig,
-    private readonly filmDatabaseMongo: FilmsRepositoryMongo,
-    private readonly filmDatabasePostgres: FilmsRepositoryPostgres,
+    @InjectRepository(Film)
+    private filmsRepository: Repository<Film>,
   ) {}
 
-  async findAll() {
-    if (this.config.database.driver === 'mongodb') {
-      return this.filmDatabaseMongo.findAllFilms();
-    } else if (this.config.database.driver === 'postgres') {
-      return this.filmDatabasePostgres.findAllFilms();
-    }
+  async findAll(): Promise<{ total: number; items: Film[] }> {
+    const [total, items] = await Promise.all([
+      this.filmsRepository.count(),
+      this.filmsRepository.find({ relations: { schedule: true } }),
+    ]);
+
+    return { total, items };
   }
 
-  async findById(id: string) {
-    if (this.config.database.driver === 'mongodb') {
-      return this.filmDatabaseMongo.findFilmById(id);
-    } else if (this.config.database.driver === 'postgres') {
-      return this.filmDatabasePostgres.findFilmById(id);
+  async findById(
+    filmId: string,
+  ): Promise<{ total: number; items: Schedule[] }> {
+    try {
+      const film = await this.filmsRepository.findOne({
+        where: { id: filmId },
+        relations: { schedule: true },
+      });
+      return {
+        total: film.schedule.length,
+        items: film.schedule,
+      };
+    } catch (error) {
+      throw new FilmNotFoundException(filmId);
     }
   }
 }

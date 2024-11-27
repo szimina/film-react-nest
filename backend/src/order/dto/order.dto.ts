@@ -1,7 +1,6 @@
-//TODO реализовать DTO для /orders
 import { IsString, IsNumber } from 'class-validator';
 
-class GetTicketDto {
+export class GetTicketDto {
   @IsString()
   film: string;
   @IsString()

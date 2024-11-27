@@ -1,16 +1,11 @@
 import { Module } from '@nestjs/common';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { ServeStaticModule } from '@nestjs/serve-static';
 import { ConfigModule } from '@nestjs/config';
 import * as path from 'node:path';
-import { ConfigProvider } from './app.config.provider';
-import { DatabaseModule } from './database/database.module';
-import { FilmsProvider } from './films/films.provider';
-import { FilmsRepositoryMongo } from './repository/filmsMongo.repository';
-import { FilmsController } from './films/films.controller';
-import { OrderController } from './order/order.controller';
-import { FilmsService } from './films/films.service';
-import { OrderService } from './order/order.service';
-import { FilmsRepositoryPostgres } from './repository/filmsPostgres.repository';
+import { FilmsModule } from './films/films.module';
+import { OrderModule } from './order/order.module';
+import { PostgresConfig } from './config/postgres.config';
 
 @Module({
   imports: [
@@ -22,16 +17,12 @@ import { FilmsRepositoryPostgres } from './repository/filmsPostgres.repository';
       rootPath: path.join(__dirname, '..', 'public'),
       renderPath: '/content/afisha/',
     }),
-    DatabaseModule,
-  ],
-  controllers: [FilmsController, OrderController],
-  providers: [
-    ConfigProvider,
-    FilmsProvider,
-    FilmsRepositoryMongo,
-    FilmsRepositoryPostgres,
-    FilmsService,
-    OrderService,
+    TypeOrmModule.forRootAsync({
+      useClass: PostgresConfig,
+      inject: [PostgresConfig],
+    }),
+    OrderModule,
+    FilmsModule,
   ],
 })
 export class AppModule {}
