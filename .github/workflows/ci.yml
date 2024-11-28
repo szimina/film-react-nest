@@ -22,7 +22,7 @@ jobs:
               with:
                 registry: ghcr.io
                 username: szimina
-                password: ${{ secrets.DOCKER_SECRET }}
+                password: Ostrov123-
 
             - name: Setup Buildx
               uses: docker/setup-buildx-action@v3
