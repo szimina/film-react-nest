@@ -1,8 +1,5 @@
 services:
   backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
     container_name: backend
     image: ghcr.io/szimina/film-react-nest/backend:latest
     depends_on:
@@ -14,9 +11,6 @@ services:
     restart: unless-stopped
 
   frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
     container_name: frontend
     image: ghcr.io/szimina/film-react-nest/frontend:latest
     networks:
@@ -42,7 +36,7 @@ services:
     image: dpage/pgadmin4:7.2
     container_name: pgadmin
     env_file:
-      - pgadmin/.env
+      - backend/.env
     volumes:
       - pgadmin-data:/var/lib/pgadmin
     ports:
