@@ -41,7 +41,7 @@ jobs:
                 push: true
                 cache-from: type=local,src=/tmp/.buildx-cache
                 cache-to: type=local,dest=/tmp/.buildx-cache
-                tags: ghcr.io/film-react-nest/frontend:latest
+                tags: ghcr.io/${{ github.actor }}/${{ github.repository }}/frontend:latest
                 
             - name: Backend image
               uses: docker/build-push-action@v3
@@ -51,4 +51,4 @@ jobs:
                 push: true
                 cache-from: type=local,src=/tmp/.buildx-cache
                 cache-to: type=local,dest=/tmp/.buildx-cache
-                tags: ghcr.io/film-react-nest/backend:latest
+                tags: ghcr.io/${{ github.actor }}/${{ github.repository }}/backend:latest
