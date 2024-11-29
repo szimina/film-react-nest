@@ -1,7 +1,7 @@
 import { Controller, Get, Param } from '@nestjs/common';
 import { FilmsService } from './films.service';
 
-@Controller('film')
+@Controller('films')
 export class FilmsController {
   constructor(private readonly filmsDatabase: FilmsService) {}
 
