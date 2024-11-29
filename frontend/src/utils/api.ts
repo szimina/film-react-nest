@@ -136,7 +136,7 @@ export class FilmAPI extends Api implements IFilmAPI {
      */
     async getFilmSchedule(id: string): Promise<Session[]> {
         const data = await this._get<ApiListResponse<Session>>(
-            `/films/${id}/schedule`
+            `/${id}/schedule`
         );
         console.log(data);
         return data.items.map((schedule) => {
@@ -154,7 +154,7 @@ export class FilmAPI extends Api implements IFilmAPI {
      * Получить список фильмов
      */
     async getFilms(): Promise<Movie[]> {
-        const data = await this._get<ApiListResponse<Movie>>('/films');
+        const data = await this._get<ApiListResponse<Movie>>('');
         return data.items.map((item) => ({
             ...item,
             image: this.cdn + item.image,
