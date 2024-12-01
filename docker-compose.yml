@@ -5,7 +5,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - postgres
+      - webnet
     env_file:
       - backend/.env
     restart: unless-stopped
@@ -14,7 +14,7 @@ services:
     container_name: frontend
     image: ghcr.io/szimina/film-react-nest/frontend:latest
     networks:
-      - frontend
+      - webnet
     volumes:
       - frontend_dist:/app/dist
     env_file:
@@ -30,7 +30,7 @@ services:
       - postgres-data:/var/lib/postgresql/data
     restart: unless-stopped
     networks:
-      - postgres
+      - webnet
 
   pgadmin:
     image: dpage/pgadmin4:7.2
@@ -42,7 +42,7 @@ services:
     ports:
       - 8080:80
     networks:
-      - postgres
+      - webnet
     depends_on:
       - postgres
     deploy:
@@ -56,19 +56,26 @@ services:
     image: nginx
     ports:
       - 80:80
+      - 443:443
     networks:
-      - frontend
-      - postgres
+      - webnet
     restart: always
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
       - frontend_dist:/var/www/frontend:ro
+      - ./certbot/www/:/var/www/certbot/:ro
+      - ./certbot/conf/:/etc/letsencrypt/:ro
+
+  certbot:
+    image: certbot/certbot:latest
+    networks:
+      - webnet
+    volumes:
+      - ./certbot/www/:/var/www/certbot/:rw
+      - ./certbot/conf/:/etc/letsencrypt/:rw
 
 networks:
-  frontend:
-    driver: bridge
-  postgres:
-    driver: bridge
+  webnet:
 
 volumes:
   postgres-data:

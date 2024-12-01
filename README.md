@@ -27,12 +27,6 @@
 `frontend/`
 Создайте `.env` файл из примера `.env.example`
 
-`postgres/`
-Создайте `.env` файл из примера `.env.example`
-
-`pgadmin/`
-Создайте `.env` файл из примера `.env.example`
-
 Установите зависимости в `FILM-REACT-NEST/backend/`, `FILM-REACT-NEST/frontend/`
 
 `npm i`
