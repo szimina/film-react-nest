@@ -1,23 +1,19 @@
 import { Entity, Column, PrimaryGeneratedColumn, OneToMany } from 'typeorm';
-import { IsString, IsNumber, IsArray } from 'class-validator';
 import { Schedule } from './schedule.entity';
+import { IsString, IsNumber, IsArray } from 'class-validator';
 
-@Entity()
+@Entity({ name: 'films' })
 export class Film {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('uuid')
   id: string;
-
-  @Column()
-  @IsString()
-  title: string;
-
-  @Column()
-  @IsString()
-  director: string;
 
   @Column()
   @IsNumber()
   rating: number;
+
+  @Column()
+  @IsString()
+  director: string;
 
   @Column('text', { array: true })
   @IsArray()
@@ -30,6 +26,10 @@ export class Film {
   @Column()
   @IsString()
   cover: string;
+
+  @Column()
+  @IsString()
+  title: string;
 
   @Column()
   @IsString()

@@ -21,7 +21,7 @@ function App() {
            <Header counter={state.basket.length} onClick={handlers.handleOpenBasket} />
             {data.preview && <FilmPreview {...data.preview} onClick={handlers.handleOpenFilm}  /> }
             <FilmsGallery
-                items={state.films}
+                tickets={state.films}
                 selected={state.selectedFilm}
                 onClick={handlers.setSelectedFilm}
             />
@@ -56,7 +56,7 @@ function App() {
             />}
 
             {(state.modal === 'basket') && <Basket
-                items={data.basket}
+                tickets={data.basket}
                 onDelete={handlers.removeTicket}
             />}
 

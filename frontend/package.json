@@ -13,6 +13,7 @@
     "component": "sh ./bin/copy.sh Component src/components"
   },
   "dependencies": {
+    "@nestjs/testing": "^10.4.8",
     "clsx": "^2.1.1",
     "dayjs": "^1.11.11",
     "react": "^18.3.1",
@@ -27,6 +28,7 @@
     "@storybook/react": "^8.1.11",
     "@storybook/react-vite": "^8.1.11",
     "@storybook/test": "^8.1.11",
+    "@types/jest": "^29.5.14",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
     "@typescript-eslint/eslint-plugin": "^7.13.1",

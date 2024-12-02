@@ -4,14 +4,14 @@ import clsx from "clsx";
 
 export type FilmsGalleryProps = {
     onClick?: (id: string) => void;
-    items: CardProps[];
+    tickets: CardProps[];
     selected?: string | null;
 }
 
-export function FilmsGallery({items, selected = null, onClick}: FilmsGalleryProps) {
+export function FilmsGallery({tickets, selected = null, onClick}: FilmsGalleryProps) {
     return (
         <footer className={styles.gallery}>
-            {items.map((item) => (
+            {tickets.map((item) => (
                 <Card
                     key={item.id}
                     {...item}

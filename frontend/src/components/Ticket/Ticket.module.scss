@@ -3,7 +3,7 @@
 
 .ticket {
   @include mixins.flex(row);
-  align-items: center;
+  align-tickets: center;
   gap: $defaultPadding;
   background: $primaryLight;
   padding: $defaultPadding;

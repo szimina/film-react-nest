@@ -37,7 +37,7 @@
 
   .footer {
     @include mixins.flex(row);
-    align-items: center;
+    align-tickets: center;
     gap: 2rem;
   }
 

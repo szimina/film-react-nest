@@ -26,9 +26,9 @@ paths:
                   total:
                     type: number
                     minimum: 0
-                  items:
+                  tickets:
                     type: array
-                    items:
+                    tickets:
                       type: object
                       allOf:
                         - $ref: '#/components/schemas/Film'
@@ -55,9 +55,9 @@ paths:
                   total:
                     type: number
                     minimum: 0
-                  items:
+                  tickets:
                     type: array
-                    items:
+                    tickets:
                       type: object
                       allOf:
                         - $ref: '#/components/schemas/Shedule'
@@ -79,7 +79,7 @@ paths:
                   example: +7 (000) 000-00-00
                 tickets:
                   type: array
-                  items:
+                  tickets:
                     type: object
                     allOf:
                       - $ref: '#/components/schemas/Ticket'
@@ -95,9 +95,9 @@ paths:
                     type: number
                     minimum: 0
                     example: 2
-                  items:
+                  tickets:
                     type: array
-                    items:
+                    tickets:
                       type: object
                       allOf:
                         - $ref: '#/components/schemas/Ticket'
@@ -146,7 +146,7 @@ components:
           example: 'Итан Райт'
         tags:
           type: array
-          items:
+          tickets:
             type: string
           example: ['Документальный']
         title:
@@ -189,7 +189,7 @@ components:
           example: 350
         taken:
             type: array
-            items:
+            tickets:
               type: string
               example: '1:2'
     Ticket:

@@ -48,6 +48,8 @@ export class Api {
         data: object,
         method = EnumApiMethods.POST
     ) {
+        console.log(this.baseUrl);
+        console.log(uri)
         const response = await fetch(this.baseUrl + uri, {
             ...this._options,
             method,
@@ -136,6 +138,7 @@ export class FilmAPI extends Api implements IFilmAPI {
         const data = await this._get<ApiListResponse<Session>>(
             `/films/${id}/schedule`
         );
+        console.log(data);
         return data.items.map((schedule) => {
             const daytime = dayjs(schedule.daytime);
             return {
@@ -171,10 +174,11 @@ export class FilmAPI extends Api implements IFilmAPI {
             '/order',
             order
         );
-        return data.items.map((ticket) => {
-            const daytime = dayjs(ticket.daytime);
+        console.log(data)
+        return data.items.map((item) => {
+            const daytime = dayjs(item.daytime);
             return {
-                ...ticket,
+                ...item,
                 day: daytime.format('D MMMM'),
                 time: daytime.format('HH:mm'),
             };
